@@ -21,7 +21,8 @@
   },
   "devDependencies": {
     "assert-called": "0.1.x",
-    "request": "2.20.x"
+    "request": "2.20.x",
+    "async": "0.2.x"
   },
   "main": "./lib/hock",
   "scripts": {
