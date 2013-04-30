@@ -20,7 +20,7 @@
         "underscore" : "1.4.x"
     },
     "devDependencies": { },
-    "main": "./lib",
+    "main": "./lib/hock",
     "scripts": {
         "test": "make test"
     },
