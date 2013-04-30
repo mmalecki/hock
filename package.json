@@ -1,0 +1,34 @@
+{
+  "name": "hock",
+  "description": "A mocking server for HTTP requests",
+  "version": "0.0.1",
+  "author": "Maciej Małecki <me@mmalecki.com>",
+  "contributors": [
+    {
+    "name": "Ken Perkins",
+    "email": "ken.perkins@rackspace.com"
+  }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/mmalecki/hock.git"
+  },
+  "keywords": [
+    "mock", "http", "test"
+  ],
+  "dependencies": {
+    "underscore" : "1.4.x"
+  },
+  "devDependencies": {
+    "assert-called": "0.1.x",
+    "request": "2.20.x",
+    "async": "0.2.x"
+  },
+  "main": "./lib/hock",
+  "scripts": {
+    "test": "make test"
+  },
+  "engines": {
+    "node": "0.8.x"
+  }
+}
