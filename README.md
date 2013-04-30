@@ -1,6 +1,6 @@
 # hock
 
-An HTTP mocking server based on [Nock](https://github.com/flatiron/nock)
+An HTTP mocking server based on [Nock](https://github.com/flatiron/nock).
 
 ## Overview
 
@@ -11,7 +11,7 @@ Nock is designed as a fully functioning HTTP service. You enqueue requests and r
 ```Javascript
 
     var hock = require('hock'),
-        request = require('request);
+        request = require('request');
 
     hock.createHock(12345, function(err, hockServer) {
 
