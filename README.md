@@ -4,9 +4,9 @@ An HTTP mocking server based on [Nock](https://github.com/flatiron/nock).
 
 ## Overview
 
-Hock is an HTTP mocking server with an API designed to closely match that of Nock. The key difference between Nock and Hock is that nock works by overriding http.clientRequest, allowing requests to be intercepted before they go over the wire.
+Hock is an HTTP mocking server with an API designed to closely match that of Nock. The key difference between Nock and Hock is that nock works by overriding `http.clientRequest`, allowing requests to be intercepted before they go over the wire.
 
-Nock is designed as a fully functioning HTTP service. You enqueue requests and responses in a similar fashion to Nock:
+Hock is designed as a fully functioning HTTP service. You enqueue requests and responses in a similar fashion to Nock:
 
 ```Javascript
 
@@ -95,6 +95,3 @@ As the `reply` and `replyWithFile` methods return the current hockServer, you ca
 ## Matching requests
 
 When a request comes in, hock iterates through the queue in a First-in-first-out approach, so long as the request matches. The criteria for matching is based on the method and the url, and additionally the request body if the request is a `PUT` or `POST`.
-
-
-
