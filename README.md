@@ -26,7 +26,7 @@ Hock is designed as a fully functioning HTTP service. You enqueue requests and r
 
 ```
 
-Unlike Nock, you create a Hock server with a callback based factory method. Behind the scenes, this spins up the new HTTP service, and begins listening to requests.
+Unlike Nock, you create a `Hock` server with a callback based factory method. Behind the scenes, this spins up the new HTTP service, and begins listening to requests.
 
 ## HTTP Methods
 
