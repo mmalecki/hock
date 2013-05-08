@@ -30,7 +30,7 @@ Unlike Nock, you create a Hock server with a callback based factory method. Behi
 
 ## HTTP Methods
 
-Hock supports the 4 primary HTTP methods at this time:
+Hock supports the 5 primary HTTP methods at this time:
 
 * GET
 * POST
