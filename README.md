@@ -1,4 +1,4 @@
-# hock
+# hock [![Build Status](https://secure.travis-ci.org/mmalecki/hock.png?branch=master)](http://travis-ci.org/mmalecki/hock)
 
 An HTTP mocking server based on [Nock](https://github.com/flatiron/nock).
 
@@ -36,6 +36,7 @@ Hock supports the 4 primary HTTP methods at this time:
 * POST
 * PUT
 * DELETE
+* HEAD
 
 ```Javascript
     // Returns a hock Request object
@@ -55,6 +56,11 @@ Hock supports the 4 primary HTTP methods at this time:
 ```Javascript
     // Returns a hock Request object
     var req = hockServer.put(url, body, requestHeaders);
+```
+
+```Javascript
+    // Returns a hock Request object
+    var req = hockServer.head(url, requestHeaders);
 ```
 
 ## Request Object
@@ -94,4 +100,4 @@ As the `reply` and `replyWithFile` methods return the current hockServer, you ca
 
 ## Matching requests
 
-When a request comes in, hock iterates through the queue in a First-in-first-out approach, so long as the request matches. The criteria for matching is based on the method and the url, and additionally the request body if the request is a `PUT` or `POST`.
+When a request comes in, hock iterates through the queue in a First-in-first-out approach, so long as the request matches. The criteria for matching is based on the method and the url, and additionally the request body if the request is a `PUT` or `POST`. If you specify request headers, they will also be matched against before sending the response.

@@ -5,9 +5,9 @@
   "author": "Maciej Małecki <me@mmalecki.com>",
   "contributors": [
     {
-    "name": "Ken Perkins",
-    "email": "ken.perkins@rackspace.com"
-  }
+      "name": "Ken Perkins",
+      "email": "ken.perkins@rackspace.com"
+    }
   ],
   "repository": {
     "type": "git",
@@ -17,18 +17,18 @@
     "mock", "http", "test"
   ],
   "dependencies": {
-    "underscore" : "1.4.x"
+    "underscore": "1.4.x"
   },
   "devDependencies": {
-    "assert-called": "0.1.x",
     "request": "2.20.x",
-    "async": "0.2.x"
+    "should": "1.2.x",
+    "mocha": "1.9.x"
   },
   "main": "./lib/hock",
   "scripts": {
     "test": "make test"
   },
   "engines": {
-    "node": "0.8.x"
+    "node": ">=0.8.x"
   }
 }
