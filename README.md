@@ -13,17 +13,26 @@ Hock is designed as a fully functioning HTTP service. You enqueue requests and r
     var hock = require('hock'),
         request = require('request');
 
-    hock.createHock(12345, function(err, hockServer) {
+    hock.createHock(function(err, hockServer) {
+        var port = hockServer.address().port;
 
         hockServer
             .get('/some/url')
             .reply(200, 'Hello!');
 
-        request('http://localhost:12345/some/url', function(err, res, body) {
+        request('http://localhost:' + port + '/some/url', function(err, res, body) {
            console.log(body);
         });
     });
 
+```
+
+A port can be optionally specified when creating the server:
+
+```Javascript
+    hock.createHock(12345, function(err, hockServer) {
+        ....
+    });
 ```
 
 Unlike Nock, you create a `Hock` server with a callback based factory method. Behind the scenes, this spins up the new HTTP service, and begins listening to requests.
