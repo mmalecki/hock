@@ -147,9 +147,60 @@ describe('Hock HTTP Tests', function() {
 
       });
     });
+
+    after(function(done) {
+      server.close(done);
+    });
   });
 
-  after(function(done) {
-    server.close(done);
+  describe("dynamic path replacing / filtering", function() {
+    before(function(done) {
+      hock.createHock(PORT, function(err, hockServer) {
+        should.not.exist(err);
+        should.exist(hockServer);
+
+        server = hockServer;
+        done();
+      });
+    });
+
+    it('should correctly use regex', function(done) {
+      server
+        .filteringPathRegEx(/password=[^&]*/g, 'password=XXX')
+        .get('/url?password=XXX')
+        .reply(200, { 'hock': 'ok' });
+
+      request('http://localhost:' + PORT + '/url?password=artischocko', function(err, res, body) {
+        should.not.exist(err);
+        should.exist(res);
+        res.statusCode.should.equal(200);
+        JSON.parse(body).should.eql({ 'hock': 'ok' });
+        done();
+
+      });
+    });
+
+    it('should correctly use functions', function(done) {
+      server
+        .filteringPath(function (p) {
+          p.should.equal('/url?password=artischocko');
+          return '/url?password=XXX';
+        })
+        .get('/url?password=XXX')
+        .reply(200, { 'hock': 'ok' });
+
+      request('http://localhost:' + PORT + '/url?password=artischocko', function(err, res, body) {
+        should.not.exist(err);
+        should.exist(res);
+        res.statusCode.should.equal(200);
+        JSON.parse(body).should.eql({ 'hock': 'ok' });
+        done();
+
+      });
+    });
+
+    after(function(done) {
+      server.close(done);
+    });
   });
 });
