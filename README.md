@@ -110,3 +110,27 @@ As the `reply` and `replyWithFile` methods return the current hockServer, you ca
 ## Matching requests
 
 When a request comes in, hock iterates through the queue in a First-in-first-out approach, so long as the request matches. The criteria for matching is based on the method and the url, and additionally the request body if the request is a `PUT` or `POST`. If you specify request headers, they will also be matched against before sending the response.
+
+## Path filtering
+
+You can filter paths using regex or a custom function, this is useful for things like timestamps that get appended to urls from clients.
+
+```Javascript
+
+    hockServer
+        .filteringPathRegEx(/timestamp=[^&]*/g, 'timestamp=123')
+        .get('/url?timestamp=123')
+        .reply(200, 'Hi!');
+
+```
+
+```Javascript
+
+    hockServer
+        .filteringPath(function (p) {
+            return '/url?timestamp=XXX';
+        })
+        .get('/url?timestamp=XXX')
+        .reply(200, 'Hi!');
+
+```
