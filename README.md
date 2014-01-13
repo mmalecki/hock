@@ -124,6 +124,21 @@ You can also call `many` and provide options:
     })
 ```
 
+You can also set requests to never expire with `Infinity`:
+```Javascript
+    hockServer.put('/path/one', {
+        foo: 1,
+        bar: {
+            baz: true
+            biz: 'asdf1234'
+        }
+    })
+    .max(Infinity)
+    .reply(202, {
+        status: 'OK'
+    })
+```
+
 ### hockServer.done() with many
 
 When using `min` and `max`, or optionally `many`, if the number of matched requests is greater or equal to the min, but still less than or equal to the max, Hock will not throw an error when calling `hockServer.done()`.
