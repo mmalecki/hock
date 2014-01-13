@@ -120,6 +120,16 @@ describe('Hock HTTP Tests', function() {
         server.done();
       }).should.throw();
     });
+
+    it('unmatched requests should call done callback with err', function (done) {
+      server
+        .head('/head')
+        .reply(200, '', { 'Content-Type': 'plain/text' })
+        .done(function(err) {
+          should.exist(err);
+          done();
+        });
+    });
   });
 
   describe("with hard coded ports", function() {
