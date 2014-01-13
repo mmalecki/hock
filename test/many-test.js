@@ -203,6 +203,95 @@ describe('Hock Multiple Request Tests', function () {
       });
     });
 
+    describe('many()', function() {
+
+      it('should fail with no requests', function (done) {
+        server
+          .get('/url')
+          .many()
+          .reply(200, { 'hock': 'ok' });
+
+          (function() {
+            server.done();
+          }).should.throw();
+          done();
+      })
+
+      it('should succeed with many requests', function (done) {
+        server
+          .get('/url')
+          .many()
+          .reply(200, { 'hock': 'ok' })
+
+        request('http://localhost:' + server.address().port + '/url', function (err, res, body) {
+          should.not.exist(err);
+          should.exist(res);
+          res.statusCode.should.equal(200);
+          JSON.parse(body).should.eql({ 'hock': 'ok' });
+
+          request('http://localhost:' + server.address().port + '/url', function (err, res, body) {
+            should.not.exist(err);
+            should.exist(res);
+            res.statusCode.should.equal(200);
+            JSON.parse(body).should.eql({ 'hock': 'ok' });
+
+            request('http://localhost:' + server.address().port + '/url', function (err, res, body) {
+              should.not.exist(err);
+              should.exist(res);
+              res.statusCode.should.equal(200);
+              JSON.parse(body).should.eql({ 'hock': 'ok' });
+
+              server.done();
+              done();
+            });
+          });
+        });
+      });
+    });
+
+
+    describe('any', function() {
+      it('should succeed with no requests', function (done) {
+        server
+          .get('/url')
+          .any()
+          .reply(200, { 'hock': 'ok' })
+          .done();
+          done();
+      })
+
+      it('should succeed with many requests', function (done) {
+        server
+          .get('/url')
+          .any()
+          .reply(200, { 'hock': 'ok' });
+
+        request('http://localhost:' + server.address().port + '/url', function (err, res, body) {
+          should.not.exist(err);
+          should.exist(res);
+          res.statusCode.should.equal(200);
+          JSON.parse(body).should.eql({ 'hock': 'ok' });
+
+          request('http://localhost:' + server.address().port + '/url', function (err, res, body) {
+            should.not.exist(err);
+            should.exist(res);
+            res.statusCode.should.equal(200);
+            JSON.parse(body).should.eql({ 'hock': 'ok' });
+
+            request('http://localhost:' + server.address().port + '/url', function (err, res, body) {
+              should.not.exist(err);
+              should.exist(res);
+              res.statusCode.should.equal(200);
+              JSON.parse(body).should.eql({ 'hock': 'ok' });
+
+              server.done();
+              done();
+            });
+          });
+        });
+      });
+    });
+
     afterEach(function (done) {
       server.close(done);
     });
