@@ -86,6 +86,63 @@ All of these methods return an instance of a `Request`, a hock object which cont
     req.replyWithFile(statusCode, filePath, responseHeaders);
 ```
 
+## Multiple matching requests
+
+You can optionally tell hock to match multiple requests for the same route:
+
+```Javascript
+    hockServer.put('/path/one', {
+        foo: 1,
+        bar: {
+            baz: true
+            biz: 'asdf1234'
+        }
+    })
+    .min(4)
+    .max(10)
+    .reply(202, {
+        status: 'OK'
+    })
+```
+
+You can also call `many` and provide options:
+
+```Javascript
+    hockServer.put('/path/one', {
+        foo: 1,
+        bar: {
+            baz: true
+            biz: 'asdf1234'
+        }
+    })
+    .many({
+        min: 4,
+        max: 10
+    })
+    .reply(202, {
+        status: 'OK'
+    })
+```
+
+You can also set requests to never expire with `Infinity`:
+```Javascript
+    hockServer.put('/path/one', {
+        foo: 1,
+        bar: {
+            baz: true
+            biz: 'asdf1234'
+        }
+    })
+    .max(Infinity)
+    .reply(202, {
+        status: 'OK'
+    })
+```
+
+### hockServer.done() with many
+
+When using `min` and `max`, or optionally `many`, if the number of matched requests is greater or equal to the min, but still less than or equal to the max, Hock will not throw an error when calling `hockServer.done()`.
+
 ## Chaining requests
 
 As the `reply` and `replyWithFile` methods return the current hockServer, you can chain them together:
