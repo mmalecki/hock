@@ -203,6 +203,50 @@ describe('Hock Multiple Request Tests', function () {
       });
     });
 
+    describe('min() and max() with replyWithFile', function () {
+      it('should succeed with a single call', function (done) {
+        server
+          .get('/url')
+          .replyWithFile(200, process.cwd() + '/test/data/hello.txt');
+
+        request('http://localhost:' + server.address().port + '/url', function (err, res, body) {
+          should.not.exist(err);
+          should.exist(res);
+          res.statusCode.should.equal(200);
+          body.should.equal('this\nis\nmy\nsample\n');
+          server.done(function (err) {
+            should.not.exist(err);
+            done();
+          });
+        });
+      });
+
+      it('should succeed with a multiple calls', function (done) {
+        server
+          .get('/url')
+          .twice()
+          .replyWithFile(200, process.cwd() + '/test/data/hello.txt');
+
+        request('http://localhost:' + server.address().port + '/url', function (err, res, body) {
+          should.not.exist(err);
+          should.exist(res);
+          res.statusCode.should.equal(200);
+          body.should.equal('this\nis\nmy\nsample\n');
+
+          request('http://localhost:' + server.address().port + '/url', function (err, res, body) {
+            should.not.exist(err);
+            should.exist(res);
+            res.statusCode.should.equal(200);
+            body.should.equal('this\nis\nmy\nsample\n');
+            server.done(function (err) {
+              should.not.exist(err);
+              done();
+            });
+          });
+        });
+      });
+    });
+
     describe('many()', function() {
 
       it('should fail with no requests', function (done) {
