@@ -105,7 +105,24 @@ You can optionally tell hock to match multiple requests for the same route:
     })
 ```
 
-You can also call `many` and provide options:
+Call `many` if you need to handle at least one, possibly
+many requests:
+
+```Javascript
+    hockServer.put('/path/one', {
+        foo: 1,
+        bar: {
+            baz: true
+            biz: 'asdf1234'
+        }
+    })
+    .many() // min 1, max Unlimited
+    .reply(202, {
+        status: 'OK'
+    })
+```
+
+Provide custom min and max options to `many`:
 
 ```Javascript
     hockServer.put('/path/one', {
@@ -124,7 +141,8 @@ You can also call `many` and provide options:
     })
 ```
 
-You can also set requests to never expire with `Infinity`:
+Set infinite number of requests with `max(Infinity)`:
+
 ```Javascript
     hockServer.put('/path/one', {
         foo: 1,
@@ -139,6 +157,21 @@ You can also set requests to never expire with `Infinity`:
     })
 ```
 
+If you don't care how many or how few requests are served, you can use `any`:
+
+```Javascript
+    hockServer.put('/path/one', {
+        foo: 1,
+        bar: {
+            baz: true
+            biz: 'asdf1234'
+        }
+    })
+    .any() // equivalent to min(0), max(Infinity)
+    .reply(202, {
+        status: 'OK'
+    })
+```
 ### hockServer.done() with many
 
 When using `min` and `max`, or optionally `many`, if the number of matched requests is greater or equal to the min, but still less than or equal to the max, Hock will not throw an error when calling `hockServer.done()`.
