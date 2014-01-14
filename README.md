@@ -174,7 +174,20 @@ If you don't care how many or how few requests are served, you can use `any`:
 ```
 ### hockServer.done() with many
 
-When using `min` and `max`, or optionally `many`, if the number of matched requests is greater or equal to the min, but still less than or equal to the max, Hock will not throw an error when calling `hockServer.done()`.
+`hockServer.done()` will verify the number of requests fits within the
+minimum and maximum constraints specified by `min`, `max`, `many` or `any`:
+
+```js
+hockServer.get('/').min(2)
+request.get('/', function() {
+  hockServer.done(function(err) {
+    console.error(err) // error, only made one request
+  })
+})
+```
+
+If the number of requests doesn't verify and you don't supply a callback
+to `hockServer.done()` it will throw!
 
 ## Chaining requests
 
