@@ -16,9 +16,6 @@
   "keywords": [
     "mock", "http", "test"
   ],
-  "dependencies": {
-    "underscore": "1.4.x"
-  },
   "devDependencies": {
     "request": "2.20.x",
     "should": "1.2.x",
