@@ -1,4 +1,5 @@
-var should = require('should'),
+var http = require('http'),
+    should = require('should'),
     request = require('request'),
     hock = require('../');
 
@@ -7,14 +8,15 @@ var PORT = 5678;
 describe('Hock HTTP Tests', function() {
 
   var server;
+  var httpServer;
 
   describe("with available ports", function() {
     before(function(done) {
-      hock.createHock(function(err, hockServer) {
+      server = hock.createHock();
+      httpServer = http.createServer(server.handler).listen(PORT, function(err) {
         should.not.exist(err);
-        should.exist(hockServer);
+        should.exist(server);
 
-        server = hockServer;
         done();
       });
     });
@@ -24,7 +26,7 @@ describe('Hock HTTP Tests', function() {
         .get('/url')
         .reply(200, { 'hock': 'ok' });
 
-      request('http://localhost:' + server.address().port + '/url', function(err, res, body) {
+      request('http://localhost:' + PORT + '/url', function(err, res, body) {
         should.not.exist(err);
         should.exist(res);
         res.statusCode.should.equal(200);
@@ -40,7 +42,7 @@ describe('Hock HTTP Tests', function() {
         .reply(201, { 'hock': 'created' });
 
       request({
-        uri: 'http://localhost:' + server.address().port + '/post',
+        uri: 'http://localhost:' + PORT + '/post',
         method: 'POST',
         json: {
           'hock': 'post'
@@ -60,7 +62,7 @@ describe('Hock HTTP Tests', function() {
         .reply(204, { 'hock': 'updated' });
 
       request({
-        uri: 'http://localhost:' +server.address().port+ '/put',
+        uri: 'http://localhost:' +PORT+ '/put',
         method: 'PUT',
         json: {
           'hock': 'put'
@@ -80,7 +82,7 @@ describe('Hock HTTP Tests', function() {
         .reply(202, { 'hock': 'deleted' });
 
       request({
-        uri: 'http://localhost:' +server.address().port+ '/delete',
+        uri: 'http://localhost:' +PORT+ '/delete',
         method: 'DELETE'
       }, function (err, res, body) {
         should.not.exist(err);
@@ -98,7 +100,7 @@ describe('Hock HTTP Tests', function() {
         .reply(200, '', { 'Content-Type': 'plain/text' });
 
       request({
-        uri: 'http://localhost:' +server.address().port+ '/head',
+        uri: 'http://localhost:' +PORT+ '/head',
         method: 'HEAD'
       }, function (err, res, body) {
         should.not.exist(err);
@@ -132,44 +134,15 @@ describe('Hock HTTP Tests', function() {
     });
   });
 
-  describe("with hard coded ports", function() {
-    before(function(done) {
-      hock.createHock(PORT, function(err, hockServer) {
-        should.not.exist(err);
-        should.exist(hockServer);
-
-        server = hockServer;
-        done();
-      });
-    });
-
-    it('should correctly respond to an HTTP GET request', function(done) {
-      server
-        .get('/url')
-        .reply(200, { 'hock': 'ok' });
-
-      request('http://localhost:' + PORT + '/url', function(err, res, body) {
-        should.not.exist(err);
-        should.exist(res);
-        res.statusCode.should.equal(200);
-        JSON.parse(body).should.eql({ 'hock': 'ok' });
-        done();
-
-      });
-    });
-
-    after(function(done) {
-      server.close(done);
-    });
-  });
-
   describe("dynamic path replacing / filtering", function() {
     before(function(done) {
-      hock.createHock(PORT, function(err, hockServer) {
-        should.not.exist(err);
-        should.exist(hockServer);
+      httpServer.close();
 
-        server = hockServer;
+      server = hock.createHock();
+      httpServer = http.createServer(server.handler).listen(PORT, function(err) {
+        should.not.exist(err);
+        should.exist(server);
+
         done();
       });
     });
@@ -269,7 +242,7 @@ describe('Hock HTTP Tests', function() {
     });
 
     after(function(done) {
-      server.close(done);
+      httpServer.close(done);
     });
   });
 });

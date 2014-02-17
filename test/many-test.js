@@ -1,4 +1,5 @@
-var should = require('should'),
+var http = require('http'),
+  should = require('should'),
   request = require('request'),
   hock = require('../');
 
@@ -7,14 +8,15 @@ var PORT = 5678;
 describe('Hock Multiple Request Tests', function () {
 
   var server;
+  var httpServer;
 
   describe("With minimum requests", function () {
     beforeEach(function (done) {
-      hock.createHock(function (err, hockServer) {
+      server = hock.createHock();
+      httpServer = http.createServer(server.handler).listen(PORT, function(err) {
         should.not.exist(err);
-        should.exist(hockServer);
+        should.exist(server);
 
-        server = hockServer;
         done();
       });
     });
@@ -25,7 +27,7 @@ describe('Hock Multiple Request Tests', function () {
         .once()
         .reply(200, { 'hock': 'ok' });
 
-      request('http://localhost:' + server.address().port + '/url', function (err, res, body) {
+      request('http://localhost:' + PORT + '/url', function (err, res, body) {
         should.not.exist(err);
         should.exist(res);
         res.statusCode.should.equal(200);
@@ -41,7 +43,7 @@ describe('Hock Multiple Request Tests', function () {
         .min(2)
         .reply(200, { 'hock': 'ok' });
 
-      request('http://localhost:' + server.address().port + '/url', function (err, res, body) {
+      request('http://localhost:' + PORT + '/url', function (err, res, body) {
         should.not.exist(err);
         should.exist(res);
         res.statusCode.should.equal(200);
@@ -59,13 +61,13 @@ describe('Hock Multiple Request Tests', function () {
         .min(2)
         .reply(200, { 'hock': 'ok' });
 
-      request('http://localhost:' + server.address().port + '/url', function (err, res, body) {
+      request('http://localhost:' + PORT + '/url', function (err, res, body) {
         should.not.exist(err);
         should.exist(res);
         res.statusCode.should.equal(200);
         JSON.parse(body).should.eql({ 'hock': 'ok' });
 
-        request('http://localhost:' + server.address().port + '/url', function (err, res, body) {
+        request('http://localhost:' + PORT + '/url', function (err, res, body) {
           should.not.exist(err);
           should.exist(res);
           res.statusCode.should.equal(200);
@@ -83,7 +85,7 @@ describe('Hock Multiple Request Tests', function () {
         .max(2)
         .reply(200, { 'hock': 'ok' });
 
-      request('http://localhost:' + server.address().port + '/url', function (err, res, body) {
+      request('http://localhost:' + PORT + '/url', function (err, res, body) {
         should.not.exist(err);
         should.exist(res);
         res.statusCode.should.equal(200);
@@ -100,13 +102,13 @@ describe('Hock Multiple Request Tests', function () {
         .max(2)
         .reply(200, { 'hock': 'ok' });
 
-      request('http://localhost:' + server.address().port + '/url', function (err, res, body) {
+      request('http://localhost:' + PORT + '/url', function (err, res, body) {
         should.not.exist(err);
         should.exist(res);
         res.statusCode.should.equal(200);
         JSON.parse(body).should.eql({ 'hock': 'ok' });
 
-        request('http://localhost:' + server.address().port + '/url', function (err, res, body) {
+        request('http://localhost:' + PORT + '/url', function (err, res, body) {
           should.not.exist(err);
           should.exist(res);
           res.statusCode.should.equal(200);
@@ -125,13 +127,13 @@ describe('Hock Multiple Request Tests', function () {
         .max(3)
         .reply(200, { 'hock': 'ok' });
 
-      request('http://localhost:' + server.address().port + '/url', function (err, res, body) {
+      request('http://localhost:' + PORT + '/url', function (err, res, body) {
         should.not.exist(err);
         should.exist(res);
         res.statusCode.should.equal(200);
         JSON.parse(body).should.eql({ 'hock': 'ok' });
 
-        request('http://localhost:' + server.address().port + '/url', function (err, res, body) {
+        request('http://localhost:' + PORT + '/url', function (err, res, body) {
           should.not.exist(err);
           should.exist(res);
           res.statusCode.should.equal(200);
@@ -150,13 +152,13 @@ describe('Hock Multiple Request Tests', function () {
         .max(Infinity)
         .reply(200, { 'hock': 'ok' });
 
-      request('http://localhost:' + server.address().port + '/url', function (err, res, body) {
+      request('http://localhost:' + PORT + '/url', function (err, res, body) {
         should.not.exist(err);
         should.exist(res);
         res.statusCode.should.equal(200);
         JSON.parse(body).should.eql({ 'hock': 'ok' });
 
-        request('http://localhost:' + server.address().port + '/url', function (err, res, body) {
+        request('http://localhost:' + PORT + '/url', function (err, res, body) {
           should.not.exist(err);
           should.exist(res);
           res.statusCode.should.equal(200);
@@ -178,19 +180,19 @@ describe('Hock Multiple Request Tests', function () {
         .once()
         .reply(200, { 'hock': 'ok' });
 
-      request('http://localhost:' + server.address().port + '/url', function (err, res, body) {
+      request('http://localhost:' + PORT + '/url', function (err, res, body) {
         should.not.exist(err);
         should.exist(res);
         res.statusCode.should.equal(200);
         JSON.parse(body).should.eql({ 'hock': 'ok' });
 
-        request('http://localhost:' + server.address().port + '/asdf', function (err, res, body) {
+        request('http://localhost:' + PORT + '/asdf', function (err, res, body) {
           should.not.exist(err);
           should.exist(res);
           res.statusCode.should.equal(200);
           JSON.parse(body).should.eql({ 'hock': 'ok' });
 
-          request('http://localhost:' + server.address().port + '/url', function (err, res, body) {
+          request('http://localhost:' + PORT + '/url', function (err, res, body) {
             should.not.exist(err);
             should.exist(res);
             res.statusCode.should.equal(200);
@@ -209,7 +211,7 @@ describe('Hock Multiple Request Tests', function () {
           .get('/url')
           .replyWithFile(200, process.cwd() + '/test/data/hello.txt');
 
-        request('http://localhost:' + server.address().port + '/url', function (err, res, body) {
+        request('http://localhost:' + PORT + '/url', function (err, res, body) {
           should.not.exist(err);
           should.exist(res);
           res.statusCode.should.equal(200);
@@ -227,13 +229,13 @@ describe('Hock Multiple Request Tests', function () {
           .twice()
           .replyWithFile(200, process.cwd() + '/test/data/hello.txt');
 
-        request('http://localhost:' + server.address().port + '/url', function (err, res, body) {
+        request('http://localhost:' + PORT + '/url', function (err, res, body) {
           should.not.exist(err);
           should.exist(res);
           res.statusCode.should.equal(200);
           body.should.equal('this\nis\nmy\nsample\n');
 
-          request('http://localhost:' + server.address().port + '/url', function (err, res, body) {
+          request('http://localhost:' + PORT + '/url', function (err, res, body) {
             should.not.exist(err);
             should.exist(res);
             res.statusCode.should.equal(200);
@@ -267,19 +269,19 @@ describe('Hock Multiple Request Tests', function () {
           .many()
           .reply(200, { 'hock': 'ok' })
 
-        request('http://localhost:' + server.address().port + '/url', function (err, res, body) {
+        request('http://localhost:' + PORT + '/url', function (err, res, body) {
           should.not.exist(err);
           should.exist(res);
           res.statusCode.should.equal(200);
           JSON.parse(body).should.eql({ 'hock': 'ok' });
 
-          request('http://localhost:' + server.address().port + '/url', function (err, res, body) {
+          request('http://localhost:' + PORT + '/url', function (err, res, body) {
             should.not.exist(err);
             should.exist(res);
             res.statusCode.should.equal(200);
             JSON.parse(body).should.eql({ 'hock': 'ok' });
 
-            request('http://localhost:' + server.address().port + '/url', function (err, res, body) {
+            request('http://localhost:' + PORT + '/url', function (err, res, body) {
               should.not.exist(err);
               should.exist(res);
               res.statusCode.should.equal(200);
@@ -310,19 +312,19 @@ describe('Hock Multiple Request Tests', function () {
           .any()
           .reply(200, { 'hock': 'ok' });
 
-        request('http://localhost:' + server.address().port + '/url', function (err, res, body) {
+        request('http://localhost:' + PORT + '/url', function (err, res, body) {
           should.not.exist(err);
           should.exist(res);
           res.statusCode.should.equal(200);
           JSON.parse(body).should.eql({ 'hock': 'ok' });
 
-          request('http://localhost:' + server.address().port + '/url', function (err, res, body) {
+          request('http://localhost:' + PORT + '/url', function (err, res, body) {
             should.not.exist(err);
             should.exist(res);
             res.statusCode.should.equal(200);
             JSON.parse(body).should.eql({ 'hock': 'ok' });
 
-            request('http://localhost:' + server.address().port + '/url', function (err, res, body) {
+            request('http://localhost:' + PORT + '/url', function (err, res, body) {
               should.not.exist(err);
               should.exist(res);
               res.statusCode.should.equal(200);
@@ -337,7 +339,7 @@ describe('Hock Multiple Request Tests', function () {
     });
 
     afterEach(function (done) {
-      server.close(done);
+      httpServer.close(done);
     });
   });
 });
