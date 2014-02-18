@@ -14,7 +14,9 @@
     "url": "http://github.com/mmalecki/hock.git"
   },
   "keywords": [
-    "mock", "http", "test"
+    "mock",
+    "http",
+    "test"
   ],
   "devDependencies": {
     "request": "2.20.x",
@@ -27,5 +29,8 @@
   },
   "engines": {
     "node": ">=0.8.x"
+  },
+  "dependencies": {
+    "deep-equal": "0.2.1"
   }
 }

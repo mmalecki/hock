@@ -213,4 +213,63 @@ describe('Hock HTTP Tests', function() {
       server.close(done);
     });
   });
+
+  describe("test if route exists", function() {
+    before(function(done) {
+      hock.createHock(PORT, function(err, hockServer) {
+        should.not.exist(err);
+        should.exist(hockServer);
+
+        server = hockServer;
+        done();
+      });
+    });
+
+    it('should allow testing for url', function(done) {
+      server
+        .get('/url?password=foo')
+        .reply(200, { 'hock': 'ok' })
+        .get('/arti')
+        .reply(200, { 'hock': 'ok' });
+
+      server.hasRoute('GET', '/url?password=foo').should.equal(true);
+      server.hasRoute('GET', '/arti').should.equal(true);
+      server.hasRoute('GET', '/notexist').should.equal(false);
+      done();
+    });
+
+    it('matches the header', function(done) {
+      server
+        .get('/url?password=foo')
+        .reply(200, { 'hock': 'ok' })
+        .get('/artischocko', { 'foo-type': 'artischocke' })
+        .reply(200, { 'hock': 'ok' });
+
+      server
+        .hasRoute('GET', '/bla?password=foo', null, { 'content-type': 'plain/text' })
+        .should.equal(false);
+      server
+        .hasRoute('GET', '/artischocko', null, { 'foo-type': 'artischocke' })
+        .should.equal(true);
+
+      done();
+    });
+
+    it('matches the body', function(done) {
+      server
+        .get('/url?password=foo')
+        .reply(200, { 'hock': 'ok' })
+        .post('/artischocko', 'enteente')
+        .reply(200, { 'hock': 'ok' });
+
+      server.hasRoute('GET', '/bla?password=foo', 'testing').should.equal(false);
+      server.hasRoute('POST', '/artischocko', 'enteente').should.equal(true);
+
+      done();
+    });
+
+    after(function(done) {
+      server.close(done);
+    });
+  });
 });
