@@ -7,22 +7,22 @@ var PORT = 5678;
 
 describe('Hock HTTP Tests', function() {
 
-  var server;
+  var hockInstance;
   var httpServer;
 
   describe("with available ports", function() {
     before(function(done) {
-      server = hock.createHock();
-      httpServer = http.createServer(server.handler).listen(PORT, function(err) {
+      hockInstance = hock.createHock();
+      httpServer = http.createServer(hockInstance.handler).listen(PORT, function(err) {
         should.not.exist(err);
-        should.exist(server);
+        should.exist(hockInstance);
 
         done();
       });
     });
 
     it('should correctly respond to an HTTP GET request', function(done) {
-      server
+      hockInstance
         .get('/url')
         .reply(200, { 'hock': 'ok' });
 
@@ -37,7 +37,7 @@ describe('Hock HTTP Tests', function() {
     });
 
     it('should correctly respond to an HTTP POST request', function (done) {
-      server
+      hockInstance
         .post('/post', { 'hock': 'post' })
         .reply(201, { 'hock': 'created' });
 
@@ -57,7 +57,7 @@ describe('Hock HTTP Tests', function() {
     });
 
     it('should correctly respond to an HTTP PUT request', function (done) {
-      server
+      hockInstance
         .put('/put', { 'hock': 'put' })
         .reply(204, { 'hock': 'updated' });
 
@@ -77,7 +77,7 @@ describe('Hock HTTP Tests', function() {
     });
 
     it('should correctly respond to an HTTP DELETE request', function (done) {
-      server
+      hockInstance
         .delete('/delete')
         .reply(202, { 'hock': 'deleted' });
 
@@ -95,7 +95,7 @@ describe('Hock HTTP Tests', function() {
     });
 
     it('should correctly respond to an HTTP HEAD request', function (done) {
-      server
+      hockInstance
         .head('/head')
         .reply(200, '', { 'Content-Type': 'plain/text' });
 
@@ -114,17 +114,17 @@ describe('Hock HTTP Tests', function() {
     });
 
     it('unmatched requests should throw', function () {
-      server
+      hockInstance
         .head('/head')
         .reply(200, '', { 'Content-Type': 'plain/text' });
 
       (function() {
-        server.done();
+        hockInstance.done();
       }).should.throw();
     });
 
     it('unmatched requests should call done callback with err', function (done) {
-      server
+      hockInstance
         .head('/head')
         .reply(200, '', { 'Content-Type': 'plain/text' })
         .done(function(err) {
@@ -132,23 +132,25 @@ describe('Hock HTTP Tests', function() {
           done();
         });
     });
+
+    after(function (done) {
+      httpServer.close(done);
+    });
   });
 
   describe("dynamic path replacing / filtering", function() {
     before(function(done) {
-      httpServer.close();
-
-      server = hock.createHock();
-      httpServer = http.createServer(server.handler).listen(PORT, function(err) {
+      hockInstance = hock.createHock();
+      httpServer = http.createServer(hockInstance.handler).listen(PORT, function(err) {
         should.not.exist(err);
-        should.exist(server);
+        should.exist(hockInstance);
 
         done();
       });
     });
 
     it('should correctly use regex', function(done) {
-      server
+      hockInstance
         .filteringPathRegEx(/password=[^&]*/g, 'password=XXX')
         .get('/url?password=XXX')
         .reply(200, { 'hock': 'ok' });
@@ -164,7 +166,7 @@ describe('Hock HTTP Tests', function() {
     });
 
     it('should correctly use functions', function(done) {
-      server
+      hockInstance
         .filteringPath(function (p) {
           p.should.equal('/url?password=artischocko');
           return '/url?password=XXX';
@@ -183,45 +185,45 @@ describe('Hock HTTP Tests', function() {
     });
 
     after(function(done) {
-      server.close(done);
+      httpServer.close(done);
     });
   });
 
   describe("test if route exists", function() {
     before(function(done) {
-      hock.createHock(PORT, function(err, hockServer) {
+      hockInstance = hock.createHock();
+      httpServer = http.createServer(hockInstance.handler).listen(PORT, function (err) {
         should.not.exist(err);
-        should.exist(hockServer);
+        should.exist(hockInstance);
 
-        server = hockServer;
         done();
       });
     });
 
     it('should allow testing for url', function(done) {
-      server
+      hockInstance
         .get('/url?password=foo')
         .reply(200, { 'hock': 'ok' })
         .get('/arti')
         .reply(200, { 'hock': 'ok' });
 
-      server.hasRoute('GET', '/url?password=foo').should.equal(true);
-      server.hasRoute('GET', '/arti').should.equal(true);
-      server.hasRoute('GET', '/notexist').should.equal(false);
+      hockInstance.hasRoute('GET', '/url?password=foo').should.equal(true);
+      hockInstance.hasRoute('GET', '/arti').should.equal(true);
+      hockInstance.hasRoute('GET', '/notexist').should.equal(false);
       done();
     });
 
     it('matches the header', function(done) {
-      server
+      hockInstance
         .get('/url?password=foo')
         .reply(200, { 'hock': 'ok' })
         .get('/artischocko', { 'foo-type': 'artischocke' })
         .reply(200, { 'hock': 'ok' });
 
-      server
+      hockInstance
         .hasRoute('GET', '/bla?password=foo', null, { 'content-type': 'plain/text' })
         .should.equal(false);
-      server
+      hockInstance
         .hasRoute('GET', '/artischocko', null, { 'foo-type': 'artischocke' })
         .should.equal(true);
 
@@ -229,14 +231,14 @@ describe('Hock HTTP Tests', function() {
     });
 
     it('matches the body', function(done) {
-      server
+      hockInstance
         .get('/url?password=foo')
         .reply(200, { 'hock': 'ok' })
         .post('/artischocko', 'enteente')
         .reply(200, { 'hock': 'ok' });
 
-      server.hasRoute('GET', '/bla?password=foo', 'testing').should.equal(false);
-      server.hasRoute('POST', '/artischocko', 'enteente').should.equal(true);
+      hockInstance.hasRoute('GET', '/bla?password=foo', 'testing').should.equal(false);
+      hockInstance.hasRoute('POST', '/artischocko', 'enteente').should.equal(true);
 
       done();
     });
