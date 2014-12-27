@@ -62,7 +62,7 @@ describe('Hock HTTP Tests', function() {
         .reply(204, { 'hock': 'updated' });
 
       request({
-        uri: 'http://localhost:' +PORT+ '/put',
+        uri: 'http://localhost:' + PORT + '/put',
         method: 'PUT',
         json: {
           'hock': 'put'
@@ -82,7 +82,7 @@ describe('Hock HTTP Tests', function() {
         .reply(204, { 'hock': 'updated' });
 
       request({
-        uri: 'http://localhost:' +PORT+ '/patch',
+        uri: 'http://localhost:' + PORT + '/patch',
         method: 'PATCH',
         json: {
           'hock': 'patch'
@@ -102,7 +102,7 @@ describe('Hock HTTP Tests', function() {
         .reply(202, { 'hock': 'deleted' });
 
       request({
-        uri: 'http://localhost:' +PORT+ '/delete',
+        uri: 'http://localhost:' + PORT + '/delete',
         method: 'DELETE'
       }, function (err, res, body) {
         should.not.exist(err);
@@ -120,7 +120,7 @@ describe('Hock HTTP Tests', function() {
         .reply(200, '', { 'Content-Type': 'plain/text' });
 
       request({
-        uri: 'http://localhost:' +PORT+ '/head',
+        uri: 'http://localhost:' + PORT + '/head',
         method: 'HEAD'
       }, function (err, res, body) {
         should.not.exist(err);
