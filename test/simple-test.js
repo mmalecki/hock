@@ -62,10 +62,30 @@ describe('Hock HTTP Tests', function() {
         .reply(204, { 'hock': 'updated' });
 
       request({
-        uri: 'http://localhost:' +PORT+ '/put',
+        uri: 'http://localhost:' + PORT + '/put',
         method: 'PUT',
         json: {
           'hock': 'put'
+        }
+      }, function (err, res, body) {
+        should.not.exist(err);
+        should.exist(res);
+        res.statusCode.should.equal(204);
+        should.not.exist(body);
+        done();
+      });
+    });
+
+    it('should correctly respond to an HTTP PATCH request', function (done) {
+      hockInstance
+        .patch('/patch', { 'hock': 'patch' })
+        .reply(204, { 'hock': 'updated' });
+
+      request({
+        uri: 'http://localhost:' + PORT + '/patch',
+        method: 'PATCH',
+        json: {
+          'hock': 'patch'
         }
       }, function (err, res, body) {
         should.not.exist(err);
@@ -82,7 +102,7 @@ describe('Hock HTTP Tests', function() {
         .reply(202, { 'hock': 'deleted' });
 
       request({
-        uri: 'http://localhost:' +PORT+ '/delete',
+        uri: 'http://localhost:' + PORT + '/delete',
         method: 'DELETE'
       }, function (err, res, body) {
         should.not.exist(err);
@@ -100,7 +120,7 @@ describe('Hock HTTP Tests', function() {
         .reply(200, '', { 'Content-Type': 'plain/text' });
 
       request({
-        uri: 'http://localhost:' +PORT+ '/head',
+        uri: 'http://localhost:' + PORT + '/head',
         method: 'HEAD'
       }, function (err, res, body) {
         should.not.exist(err);
