@@ -35,6 +35,7 @@ Hock supports the 5 primary HTTP methods at this time:
 * GET
 * POST
 * PUT
+* PATCH
 * DELETE
 * HEAD
 
@@ -203,7 +204,7 @@ As the `reply` and `replyWithFile` methods return the current hockServer, you ca
 
 ## Matching requests
 
-When a request comes in, hock iterates through the queue in a First-in-first-out approach, so long as the request matches. The criteria for matching is based on the method and the url, and additionally the request body if the request is a `PUT` or `POST`. If you specify request headers, they will also be matched against before sending the response.
+When a request comes in, hock iterates through the queue in a First-in-first-out approach, so long as the request matches. The criteria for matching is based on the method and the url, and additionally the request body if the request is a `PUT`, `PATCH`, or `POST`. If you specify request headers, they will also be matched against before sending the response.
 
 ## Path filtering
 

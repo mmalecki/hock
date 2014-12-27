@@ -76,6 +76,26 @@ describe('Hock HTTP Tests', function() {
       });
     });
 
+    it('should correctly respond to an HTTP PATCH request', function (done) {
+      hockInstance
+        .patch('/patch', { 'hock': 'patch' })
+        .reply(204, { 'hock': 'updated' });
+
+      request({
+        uri: 'http://localhost:' +PORT+ '/patch',
+        method: 'PATCH',
+        json: {
+          'hock': 'patch'
+        }
+      }, function (err, res, body) {
+        should.not.exist(err);
+        should.exist(res);
+        res.statusCode.should.equal(204);
+        should.not.exist(body);
+        done();
+      });
+    });
+
     it('should correctly respond to an HTTP DELETE request', function (done) {
       hockInstance
         .delete('/delete')
