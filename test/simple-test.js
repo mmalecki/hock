@@ -133,6 +133,24 @@ describe('Hock HTTP Tests', function() {
       });
     });
 
+    it('should correctly respond to an HTTP COPY request', function(done) {
+      hockInstance
+        .copy('/copysrc')
+        .reply(204);
+
+      request({
+        uri: 'http://localhost:' + PORT + '/copysrc',
+        method: 'COPY'
+      }, function(err, res, body) {
+        should.not.exist(err);
+        should.exist(res);
+        res.statusCode.should.equal(204);
+        body.should.equal('');
+        done();
+
+      });
+    });
+
     it('unmatched requests should throw', function () {
       hockInstance
         .head('/head')
