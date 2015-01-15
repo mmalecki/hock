@@ -147,7 +147,6 @@ describe('Hock HTTP Tests', function() {
         res.statusCode.should.equal(204);
         body.should.equal('');
         done();
-
       });
     });
 
