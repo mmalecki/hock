@@ -1,7 +1,7 @@
 {
   "name": "hock",
   "description": "A mocking server for HTTP requests",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "author": "Maciej Małecki <me@mmalecki.com>",
   "contributors": [
     {
