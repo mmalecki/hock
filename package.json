@@ -19,9 +19,10 @@
     "test"
   ],
   "devDependencies": {
+    "mocha": "1.9.x",
     "request": "2.20.x",
-    "should": "1.2.x",
-    "mocha": "1.9.x"
+    "should": "^5.0.1",
+    "should-http": "0.0.2"
   },
   "main": "./lib/hock",
   "scripts": {

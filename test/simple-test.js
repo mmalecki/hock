@@ -1,5 +1,6 @@
 var http = require('http'),
     should = require('should'),
+    shouldHttp = require('should-http'),
     request = require('request'),
     hock = require('../');
 
@@ -128,7 +129,7 @@ describe('Hock HTTP Tests', function() {
         res.statusCode.should.equal(200);
         should.exist(body);
         body.should.equal('');
-        res.headers.should.include({ 'content-type': 'plain/text' });
+        res.should.have.header('content-type', 'plain/text');
         done();
       });
     });
