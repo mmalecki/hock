@@ -19,7 +19,7 @@
     "test"
   ],
   "devDependencies": {
-    "mocha": "1.9.x",
+    "mocha": "^2.1.0",
     "request": "2.20.x",
     "should": "^5.0.1",
     "should-http": "0.0.2"
