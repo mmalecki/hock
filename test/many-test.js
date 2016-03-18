@@ -327,6 +327,32 @@ describe('Hock Multiple Request Tests', function () {
           });
         });
       });
+
+      it('should have matching body with multiple calls', function (done) {
+        hockInstance
+            .get('/url')
+            .twice()
+            .reply(200, new RandomStream(1000));
+
+        request({'url': 'http://localhost:' + PORT + '/url', 'encoding': null}, function (err, res, body1) {
+          should.not.exist(err);
+          should.exist(res);
+          res.statusCode.should.equal(200);
+          body1.length.should.equal(1000);
+
+          request({'url': 'http://localhost:' + PORT + '/url', 'encoding': null}, function (err, res, body2) {
+            should.not.exist(err);
+            should.exist(res);
+            res.statusCode.should.equal(200);
+            body2.length.should.equal(1000);
+            body1.toString().should.equal(body2.toString());
+            hockInstance.done(function (err) {
+              should.not.exist(err);
+              done();
+            });
+          });
+        });
+      });
     });
 
     describe('many()', function() {
