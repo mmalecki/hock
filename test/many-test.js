@@ -283,19 +283,21 @@ describe('Hock Multiple Request Tests', function () {
         }
       };
 
+      var streamLen = 10000000; // 10Mb
+
       // NOTE: We need to specify encoding: null in requests below to ensure that the response is
       // not encoded as a utf8 string (we want the binary contents from the readstream returned.)
 
       it('should succeed with a single call', function (done) {
         hockInstance
           .get('/url')
-          .reply(200, new RandomStream(1000));
+          .reply(200, new RandomStream(streamLen));
 
         request({'url': 'http://localhost:' + PORT + '/url', 'encoding': null}, function (err, res, body) {
           should.not.exist(err);
           should.exist(res);
           res.statusCode.should.equal(200);
-          body.length.should.equal(1000);
+          body.length.should.equal(streamLen);
           hockInstance.done(function (err) {
             should.not.exist(err);
             done();
@@ -307,19 +309,19 @@ describe('Hock Multiple Request Tests', function () {
         hockInstance
           .get('/url')
           .twice()
-          .reply(200, new RandomStream(1000));
+          .reply(200, new RandomStream(streamLen));
 
           request({'url': 'http://localhost:' + PORT + '/url', 'encoding': null}, function (err, res, body) {
           should.not.exist(err);
           should.exist(res);
           res.statusCode.should.equal(200);
-          body.length.should.equal(1000);
+          body.length.should.equal(streamLen);
 
           request({'url': 'http://localhost:' + PORT + '/url', 'encoding': null}, function (err, res, body) {
             should.not.exist(err);
             should.exist(res);
             res.statusCode.should.equal(200);
-            body.length.should.equal(1000);
+            body.length.should.equal(streamLen);
             hockInstance.done(function (err) {
               should.not.exist(err);
               done();
