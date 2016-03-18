@@ -79,6 +79,13 @@ All of these methods return an instance of a `Request`, a hock object which cont
     req.replyWithFile(statusCode, filePath, responseHeaders);
 ```
 
+You can optionally send a ReadableStream with reply, for example testing with large responses without having to use a file on disk:
+
+```Javascript
+    // returns the current hockServer instance
+    req.reply(statusCode, new RandomStream(10000), responseHeaders);
+```
+
 ## Multiple matching requests
 
 You can optionally tell hock to match multiple requests for the same route:
