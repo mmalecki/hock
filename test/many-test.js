@@ -256,7 +256,6 @@ describe('Hock Multiple Request Tests', function () {
       var Readable = require('stream').Readable;
 
       function RandomStream(size, opt) {
-        console.log('Created random stream');
         Readable.call(this, opt);
         this.lenToGenerate = size;
       }
