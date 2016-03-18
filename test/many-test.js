@@ -1,6 +1,8 @@
 var http = require('http'),
   should = require('should'),
   request = require('request'),
+  util = require('util'),
+  crypto = require('crypto'),
   hock = require('../');
 
 var PORT = 5678;
@@ -240,6 +242,85 @@ describe('Hock Multiple Request Tests', function () {
             should.exist(res);
             res.statusCode.should.equal(200);
             body.should.equal('this\nis\nmy\nsample\n');
+            hockInstance.done(function (err) {
+              should.not.exist(err);
+              done();
+            });
+          });
+        });
+      });
+    });
+
+    describe('min() and max() with reply (with stream)', function () {
+
+      var Readable = require('stream').Readable;
+
+      function RandomStream(size, opt) {
+        console.log('Created random stream');
+        Readable.call(this, opt);
+        this.lenToGenerate = size;
+      }
+
+      util.inherits(RandomStream, Readable);
+
+      RandomStream.prototype._read = function(size) {
+        if (!size) {
+          size = 1024; // default size
+        }
+        var ready = true;
+        while (ready) { // only cont while push returns true
+          if (size > this.lenToGenerate) { // only this left
+            size = this.lenToGenerate;
+          }
+          if (size) {
+            ready = this.push(crypto.randomBytes(size));
+            this.lenToGenerate -= size;
+          }
+          // when done, push null and exit loop
+          if (!this.lenToGenerate) {
+            this.push(null);
+            ready = false;
+          }
+        }
+      };
+
+      // NOTE: We need to specify encoding: null in requests below to ensure that the response is
+      // not encoded as a utf8 string (we want the binary contents from the readstream returned.)
+
+      it('should succeed with a single call', function (done) {
+        hockInstance
+          .get('/url')
+          .reply(200, new RandomStream(1000));
+
+        request({'url': 'http://localhost:' + PORT + '/url', 'encoding': null}, function (err, res, body) {
+          should.not.exist(err);
+          should.exist(res);
+          res.statusCode.should.equal(200);
+          body.length.should.equal(1000);
+          hockInstance.done(function (err) {
+            should.not.exist(err);
+            done();
+          });
+        });
+      });
+
+      it('should succeed with a multiple calls', function (done) {
+        hockInstance
+          .get('/url')
+          .twice()
+          .reply(200, new RandomStream(1000));
+
+          request({'url': 'http://localhost:' + PORT + '/url', 'encoding': null}, function (err, res, body) {
+          should.not.exist(err);
+          should.exist(res);
+          res.statusCode.should.equal(200);
+          body.length.should.equal(1000);
+
+          request({'url': 'http://localhost:' + PORT + '/url', 'encoding': null}, function (err, res, body) {
+            should.not.exist(err);
+            should.exist(res);
+            res.statusCode.should.equal(200);
+            body.length.should.equal(1000);
             hockInstance.done(function (err) {
               should.not.exist(err);
               done();
