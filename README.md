@@ -1,6 +1,4 @@
-# hock [![Build Status](https://secure.travis-ci.org/mmalecki/hock.png?branch=master)](http://travis-ci.org/mmalecki/hock)
-
-[![Join the chat at https://gitter.im/mmalecki/hock](https://badges.gitter.im/mmalecki/hock.svg)](https://gitter.im/mmalecki/hock?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+# hock [![Build Status](https://secure.travis-ci.org/mmalecki/hock.png?branch=master)](http://travis-ci.org/mmalecki/hock) [![Join the chat at https://gitter.im/mmalecki/hock](https://badges.gitter.im/mmalecki/hock.svg)](https://gitter.im/mmalecki/hock?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 An HTTP mocking server based on [Nock](https://github.com/flatiron/nock).
 
