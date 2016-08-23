@@ -31,5 +31,17 @@ describe('Request unit tests', function () {
         headers: {}
       }).should.equal(false);
     });
+
+    it('should accept any order of query strings', function () {
+      var request = new Request(new Object(), {
+        method: 'GET',
+        url: '/?foo=bar&bar=foo'
+      });
+
+      request.isMatch({
+        method: 'GET',
+        url: '/?bar=foo&foo=bar'
+      }).should.equal(true);
+    });
   });
 });
