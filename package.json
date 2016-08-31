@@ -34,6 +34,6 @@
   },
   "dependencies": {
     "deep-equal": "0.2.1",
-    "url-equal": "~0.1.1"
+    "url-equal": "0.1.2-1"
   }
 }
