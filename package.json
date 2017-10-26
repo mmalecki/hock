@@ -9,6 +9,7 @@
       "email": "ken.perkins@rackspace.com"
     }
   ],
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "http://github.com/mmalecki/hock.git"
