@@ -281,6 +281,15 @@ describe('Hock HTTP Tests', function() {
       done();
     });
 
+    it('matches different order of querystring parameters', function(done) {
+      hockInstance
+        .get('/url?user=foo&pass=bar')
+        .reply(200, { 'hock': 'ok' });
+
+      hockInstance.hasRoute('GET', '/url?pass=bar&user=foo').should.equal(true);
+      done();
+    });
+
     after(function(done) {
       httpServer.close(done);
     });
