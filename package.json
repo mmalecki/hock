@@ -22,8 +22,8 @@
   "devDependencies": {
     "mocha": "^2.1.0",
     "request": "2.20.x",
-    "should": "^5.0.1",
-    "should-http": "0.0.2"
+    "should": "^13.2.3",
+    "should-http": "^0.1.1"
   },
   "main": "./lib/hock",
   "scripts": {
