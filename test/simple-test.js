@@ -171,6 +171,22 @@ describe('Hock HTTP Tests', function() {
         });
     });
 
+    it('should work with a delay configured', function(done) {
+      hockInstance
+        .get('/url')
+        .delay(1000)
+        .reply(200, { 'hock': 'ok' });
+
+      request('http://localhost:' + PORT + '/url', function(err, res, body) {
+        should.not.exist(err);
+        should.exist(res);
+        res.statusCode.should.equal(200);
+        JSON.parse(body).should.eql({ 'hock': 'ok' });
+        done();
+
+      });
+    });
+
     after(function (done) {
       httpServer.close(done);
     });
