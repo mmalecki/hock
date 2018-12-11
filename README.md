@@ -39,6 +39,7 @@ Hock supports the 5 primary HTTP methods at this time:
 * DELETE
 * HEAD
 * COPY
+* OPTIONS
 
 ```Javascript
     // Returns a hock Request object
