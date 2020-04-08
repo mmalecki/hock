@@ -1,4 +1,5 @@
 var http = require('http'),
+    url = require('url'),
     should = require('should'),
     shouldHttp = require('should-http'),
     request = require('request'),
@@ -188,6 +189,45 @@ describe('Hock HTTP Tests', function() {
         (Date.now() - start).should.be.aboveOrEqual(DELAY);
         done();
 
+      });
+    });
+
+    it('should work with response body function', function(done) {
+      hockInstance
+        .get('/url?key=value')
+        .reply(200, function(request) {
+          const query = url.parse(request.url, true).query;
+          return { 'hock': 'ok', key: query.key };
+        });
+
+      request('http://localhost:' + PORT + '/url?key=value', function(err, res, body) {
+        should.not.exist(err);
+        should.exist(res);
+        res.statusCode.should.equal(200);
+        JSON.parse(body).should.eql({ 'hock': 'ok', key: 'value' });
+
+        done();
+      });
+    });
+
+    it('should work with response header function', function(done) {
+      hockInstance
+        .get('/url?key=value')
+        .reply(200, { 'hock': 'ok' }, function(request) {
+          const query = url.parse(request.url, true).query;
+          return {
+            'x-request-key': query.key,
+          };
+        });
+
+      request('http://localhost:' + PORT + '/url?key=value', function(err, res, body) {
+        should.not.exist(err);
+        should.exist(res);
+        res.statusCode.should.equal(200);
+
+        res.headers['x-request-key'].should.eql('value');
+
+        done();
       });
     });
 
