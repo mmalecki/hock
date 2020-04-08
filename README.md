@@ -87,6 +87,21 @@ You can optionally send a ReadableStream with reply, for example testing with la
     req.reply(statusCode, new RandomStream(10000), responseHeaders);
 ```
 
+You can also provide functions instead of concrete values. These functions will be called with the matching incoming http request, and it useful in cases where the response body or headers need to be constructed based on the incoming request data:
+
+```Javascript
+    // returns the current hockServer instance
+    req.reply(
+        statusCode,
+        function replyWithBody(request) {
+            return body;
+        },
+        function replyWithHeaders(request) {
+            return responseHeaders;
+        }
+    );
+```
+
 ## Multiple matching requests
 
 You can optionally tell hock to match multiple requests for the same route:
