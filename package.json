@@ -20,8 +20,8 @@
     "test"
   ],
   "devDependencies": {
-    "mocha": "^2.1.0",
-    "request": "2.20.x",
+    "mocha": "^7.1.1",
+    "request": "^2.88.2",
     "should": "^13.2.3",
     "should-http": "^0.1.1"
   },
@@ -33,7 +33,7 @@
     "node": ">=0.8.x"
   },
   "dependencies": {
-    "deep-equal": "0.2.1",
+    "deep-equal": "^2.0.2",
     "url-equal": "0.1.2-1"
   }
 }
