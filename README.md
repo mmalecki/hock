@@ -1,6 +1,6 @@
 # hock [![Build Status](https://secure.travis-ci.org/mmalecki/hock.png?branch=master)](http://travis-ci.org/mmalecki/hock)
 
-An HTTP mocking server based on [Nock](https://github.com/flatiron/nock).
+An HTTP mocking server with an API based on [Nock](https://github.com/nock/nock).
 
 ## Overview
 
