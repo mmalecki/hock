@@ -27,7 +27,7 @@
   },
   "main": "./lib/hock",
   "scripts": {
-    "test": "make test"
+    "test": "MOCK=on mocha --reporter spec -t 4000 test/*-test.js"
   },
   "engines": {
     "node": ">=0.8.x"
